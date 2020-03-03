@@ -1,0 +1,64 @@
+
+
+.pt-3-half {
+    padding-top: 1.4rem;
+}
+
+.intro-2 {
+    background: url("https://mdbootstrap.com/img/Photos/Others/img (40).jpg")no-repeat center center;
+    background-size: cover;
+}
+
+.navbar {
+    background-color: transparent;
+}
+
+.top-nav-collapse {
+    background-color: #1e3385;
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        background-color: #1e3385;
+    }
+}
+
+.dtHorizontalVerticalExampleWrapper {
+    max-width: 600px;
+    margin: 0 auto;
+}
+#dtHorizontalVerticalExample th, td {
+    white-space: nowrap;
+}
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+    bottom: .5em;
+}
+
+.table-bonas{
+    margin-top: 80px;
+    margin-left: 40px;
+    margin-right: 80px;
+    border: solid gray 1px;
+    border-radius: 5px;
+}
+.table-headas{
+    background-color: #333333;
+    color: #f9f9f9;
+
+}
+.table-headas-txt{
+    margin: auto;
+    text-align: center;
+    font-size: 12px;
+
+}
+
