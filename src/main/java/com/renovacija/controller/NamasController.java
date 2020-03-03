@@ -9,13 +9,18 @@ import com.renovacija.repository.NamasRep;
 import com.renovacija.repository.PalukanuGrazinimoGrafikasRep;
 import com.renovacija.service.NamasService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -43,23 +48,21 @@ public class NamasController {
         return "index";
     }
 
-//    @GetMapping(value = "/namaslist")
-//    public String namasListas(Model model){
-//
-//        model.addAttribute("bankailist", bankasRep.findAll());
-//        model.addAttribute("namolistas", namasRep.findAll());
-//        model.addAttribute("namo", new Namas());
-//        return "namaslist";
-//    }
 
 //----------------------- Now -------------
 
     @GetMapping(value = {"/namaslistas"})
-    public ModelAndView namasAddListas(@RequestParam (name = "error", required = false) String error, @RequestParam(name = "id", required=false) String namoId ) {
+    public ModelAndView namasAddListas(@RequestParam (name = "error", required = false) String error, @RequestParam(name = "id", required=false) String namoId, HttpServletRequest request ) {
         ModelAndView mav = new ModelAndView();
         mav.addObject("error", error);
         mav.addObject("bankailist", bankasRep.findAll());
-        mav.addObject("namasadd", namasRep.findAll());
+        List<Namas> namas=(List<Namas>) namasService.findAll();
+        PagedListHolder pagedListHolder = new PagedListHolder(namas);
+        int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+        pagedListHolder.setPage(page);
+        pagedListHolder.setPageSize(10);
+        mav.addObject("namasadd", pagedListHolder);
+
         if (namoId != null) {
             if(namoId.equals("new")){
                 mav.addObject("modaladd", true);
@@ -93,7 +96,6 @@ public class NamasController {
             mv.setViewName("redirect:/namaslistas");
             return mv;
         }
-
 
         namasRep.save(namasAdd.getNamas());
         if(namasAdd.getPalukanuGrazinimoGrafikas().getNamas()==null) {

@@ -2,6 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="tg" tagdir="/WEB-INF/tags"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
@@ -37,11 +38,24 @@
     </div>
 </c:if>
 
+    <jsp:useBean id="namasadd" scope="request"
+                 type="org.springframework.beans.support.PagedListHolder" />
+    <c:url value="/namaslistas" var="pagedLink">
+        <c:param name="p" value="~" />
+    </c:url>
+
+    <div style="display: inline">
+
+        <button style="float: right; margin: 10px" onclick="location.href='?id=new'" class="btn btn-light" ><i class="fas fa-home"></i>  Add</button>
+
+        <div style="float: left;margin-top: 35px"><tg:paging pagedListHolder="${namasadd}" pagedLink="${pagedLink}"  /></div>
+    </div>
 
 
-<button style="float: right; margin: 10px" onclick="location.href='?id=new'" class="btn btn-light" ><i class="fas fa-home"></i>  Add</button>
+
 
 <div class="table-bonas" style="overflow-x:auto;">
+
 <table id="dtHorizontalVerticalExample" class="table table-striped table-bordered table-sm " cellspacing="0" width="100%">
     <thead class="table-headas">
     <tr>
@@ -62,7 +76,7 @@
 
     <tbody >
     <c:if test="${not empty namasadd}">
-        <c:forEach items="${namasadd}" var="listas">
+        <c:forEach items="${namasadd.pageList}" var="listas">
             <tr>
                 <td style="text-align: center">${listas.id}</td>
                 <td style="text-align: center">${listas.gatve}</td>
@@ -80,6 +94,8 @@
     </tbody>
 </table>
 </div>
+
+    <tg:paging pagedListHolder="${namasadd}" pagedLink="${pagedLink}" />
 
 <!-- Update Start-->
 <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalUpdate"
@@ -207,14 +223,11 @@
         if(${modalupdate} === true) {
             $('#modalUpdate').modal('show');
         }
-
-
     });
 
 
     $(document).ready(function()
     {
-
         $("#dtBox").DateTimePicker();
 
     });

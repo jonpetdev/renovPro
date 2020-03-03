@@ -9,15 +9,19 @@ import com.renovacija.repository.GridSettingsRep;
 import com.renovacija.repository.NamasRep;
 import com.renovacija.service.ButasService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class ButasController {
@@ -35,10 +39,17 @@ public class ButasController {
     GridSettingsRep gridSettingsRep;
 
     @GetMapping(value = {"/butai/{id}"})
-    public ModelAndView butuListas(@PathVariable(name = "id") Integer id, @RequestParam(name = "id", required=false) String butoId ){
+    public ModelAndView butuListas(@PathVariable(name = "id") Integer id, @RequestParam(name = "id", required=false) String butoId, HttpServletRequest request  ){
         ModelAndView mav = new ModelAndView();
         Namas namas = namasRep.getOne(id);
-        mav.addObject("butolistas", butasRep.findAllByNamas_IdOrderByButoNrAsc(id));
+        List<Butas> butas=(List<Butas>) butasService.findAllByNamas_IdOrderByButoNrAsc(id);
+        PagedListHolder pagedListHolder = new PagedListHolder(butas);
+        int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+        pagedListHolder.setPage(page);
+        pagedListHolder.setPageSize(10);
+        mav.addObject("butolistas", pagedListHolder);
+
+
         mav.addObject("namas",namas);
         mav.addObject("grid", gridSettingsRep.getOne(1));
         mav.addObject("suma", new Suma());
@@ -52,7 +63,12 @@ public class ButasController {
                 mav.addObject("modalupdate", true);
                 mav.addObject("modaladd",false);
                 mav.addObject("butoid", butoId);
-                mav.addObject("butolistas", namas.getButas());
+                List<Butas> butas1=(List<Butas>) namas.getButas() ;
+                PagedListHolder pagedListHolder1 = new PagedListHolder(butas1);
+                int page1 = ServletRequestUtils.getIntParameter(request, "p", 0);
+                pagedListHolder1.setPage(page1);
+                pagedListHolder1.setPageSize(10);
+                mav.addObject("butolistas", pagedListHolder);
                 mav.addObject("butas", butasRep.getOne(Integer.parseInt(butoId)));
             }
         }else{

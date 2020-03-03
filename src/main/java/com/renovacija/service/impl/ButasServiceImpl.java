@@ -54,4 +54,9 @@ public class ButasServiceImpl implements ButasService {
             }
         }
     }
+
+    @Override
+    public Iterable<Butas> findAllByNamas_IdOrderByButoNrAsc(Integer id) {
+        return butasRep.findAllByNamas_IdOrderByButoNrAsc(id);
+    }
 }

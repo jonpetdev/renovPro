@@ -2,6 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="tg" tagdir="/WEB-INF/tags"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
 <jsp:include page="nav.jsp" />
@@ -14,6 +15,12 @@
 </head>
 <body>
 <spring:url value="/addButas" var="ActionUrl" />
+
+<jsp:useBean id="butolistas" scope="request"
+             type="org.springframework.beans.support.PagedListHolder" />
+<c:url value="/butai/${namas.id}" var="pagedLink">
+    <c:param name="p" value="~" />
+</c:url>
 
 <div style="display: inline">
     <button onclick="location.href='/namaslistas'" style="position:absolute; float: left; margin: 10px" class="btn btn-light"><i class="fas fa-home"> </i>  Home</button>
@@ -97,7 +104,7 @@
 
     <tbody >
     <c:if test="${not empty butolistas}">
-        <c:forEach items="${butolistas}" var="listas">
+        <c:forEach items="${butolistas.pageList}" var="listas">
             <tr style="height: 50px">
                 <td style="text-align: center;border-right: solid 1px grey">${listas.id}</td>
                 <c:if test="${grid.adresas eq true}">
@@ -179,16 +186,13 @@
             </tr>
 
 
-
-
-
-
         </c:forEach>
     </c:if>
     </tbody>
 
 </table>
 </div>
+<tg:paging pagedListHolder="${butolistas}" pagedLink="${pagedLink}"  />
 <!-- Update Start-->
 <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalUpdate"
      aria-hidden="true">
